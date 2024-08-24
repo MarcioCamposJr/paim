@@ -28,7 +28,45 @@ public class PointwiseTransform extends Object {
 		double min = input.getMinimum();
 		ImageAccess output = new ImageAccess(nx, ny);
 		// Add your code here
+
+		for (int x = 0; x < nx; x++) {
+			for (int y = 0; y < ny; y++) {
+				double value = input.getPixel(x, y);
+				double rescaledValue = alpha * (value - beta);
+				
+				// Ensure the value is within [0, 255] range
+				rescaledValue = Math.max(0, Math.min(255, rescaledValue));
+				
+				output.putPixel(x, y, rescaledValue);
+			}
+		}
 		return output;	
+	}
+
+	static public ImageAccess rescale(ImageAccess input) {
+		int nx = input.getWidth();
+		int ny = input.getHeight();
+		double min = input.getMinimum();
+		double max = input.getMaximum();
+		
+		double beta = min;
+		double alpha = 255.0 / (max - min);
+		
+		ImageAccess output = new ImageAccess(nx, ny);
+		
+		for (int x = 0; x < nx; x++) {
+			for (int y = 0; y < ny; y++) {
+				double value = input.getPixel(x, y);
+				double rescaledValue = alpha * (value - beta);
+				
+				// Ensure the value is within [0, 255] range
+				rescaledValue = Math.max(0, Math.min(255, rescaledValue));
+				
+				output.putPixel(x, y, rescaledValue);
+			}
+		}
+		
+		return output;    
 	}
 
 	/**
