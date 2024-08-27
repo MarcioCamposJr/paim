@@ -19,9 +19,9 @@ public class Inverse_ {
 	}
 }
 
-public class Rescale_ {
+public class rescale_ {
 
-	public Rescale_() {
+	public rescale_() {
 		ImagePlus imp = WindowManager.getCurrentImage();
 		if (imp.getType() != ImagePlus.GRAY8 &&
 			imp.getType() != ImagePlus.GRAY16 &&
@@ -49,7 +49,7 @@ public class Saturate_ {
 		}
 		ImageAccess input = new ImageAccess(imp.getProcessor());
 		ImageAccess output = PointwiseTransform.saturate(input);
-		output.show("Saturate of " + imp.getTitle());
+		(new ImagePlus("Saturate of " + imp.getTitle(), output.createByteProcessor())).show();
 	}
 }
 
