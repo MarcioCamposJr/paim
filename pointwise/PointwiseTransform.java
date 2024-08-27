@@ -1,4 +1,3 @@
-
 public class PointwiseTransform extends Object {
 
 	/**
@@ -27,7 +26,17 @@ public class PointwiseTransform extends Object {
 		double max = input.getMaximum();
 		double min = input.getMinimum();
 		ImageAccess output = new ImageAccess(nx, ny);
-		// Add your code here
+
+		for (int x=0; x<nx; x++)
+		for (int y=0; y<ny; y++) {
+			double value = input.getPixel(x, y);
+			// normalize matrix
+			value  = (value - min)/(max-min);
+			// rescale to  8 bits
+			value = (value * 255);
+			// set in output pixel
+			output.putPixel(x, y, value);
+		}
 		return output;	
 	}
 
@@ -37,8 +46,23 @@ public class PointwiseTransform extends Object {
 	static public ImageAccess saturate(ImageAccess input) {
 		int nx = input.getWidth();
 		int ny = input.getHeight();
+		double max = input.getMaximum() - 1;
 		ImageAccess output = new ImageAccess(nx, ny);
-		// Add your code here
+
+		for (int x=0; x<nx; x++)
+		for (int y=0; y<ny; y++) {
+
+			double value = input.getPixel(x, y);
+			
+			// ensure not to exceed scale
+			if (value > 10000){
+				value = 10000;
+			}
+
+			output.putPixel(x, y, value);
+
+		}
+		output = rescale(output);
 		return output;
 	}
 	
@@ -50,7 +74,18 @@ public class PointwiseTransform extends Object {
 		int ny = zstack[0].getHeight();
 		int nz = zstack.length;
 		ImageAccess output = new ImageAccess(nx, ny);
-		// Add your code here
+		for(int i=0; i<nx; i++){
+			for(int j=0;j<ny; j++){
+				double max = 0;
+				for(int k=0;k<nz;k++){
+					double value = zstack[k].getPixel(i,j);
+					if (value > max){
+						max = value;
+					}
+				}
+				output.putPixel(i, j, max);
+			}
+		}
 		return output;	
 	}
 
